@@ -1,27 +1,54 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import NewGroup from "./screens/Groups/NewGroup";
+import Groups from "./screens/Groups/Groups";
+import Events from "./screens/Events/Events";
+import { GlobalStyles } from "./constants/style";
 
-const Drawer = createDrawerNavigator();
+const BottomeTabs = createBottomTabNavigator();
 
-export default function App() {
+const App = () => {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator>
-        <Drawer.Screen name="NewGroup" component={NewGroup} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <>
+      <StatusBar style="dark" />
+      <NavigationContainer>
+        <SafeAreaView style={styles.container}>
+          <BottomeTabs.Navigator screenOptions={{ headerShown: false }}>
+            <BottomeTabs.Screen
+              name="Groups"
+              component={Groups}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="people" color={color} size={size} />
+                ),
+              }}
+            />
+            <BottomeTabs.Screen
+              name="Events"
+              component={Events}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name="cash" color={color} size={size} />
+                ),
+              }}
+            />
+          </BottomeTabs.Navigator>
+        </SafeAreaView>
+      </NavigationContainer>
+    </>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+    backgroundColor: GlobalStyles.colors.white,
   },
 });
